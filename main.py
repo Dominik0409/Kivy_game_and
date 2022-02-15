@@ -11,14 +11,14 @@ from kivy.core.audio import SoundLoader
 
 Config.set('kivy', 'window_icon', "resources/tank.png")
 
-#window size declaration
-Window.size = (540,960)
+# window size declaration
+Window.size = (540, 960)
 
-#declaration of tile size which is later used in order to properly place objects on screen
+# declaration of tile size which is later used in order to properly place objects on screen
 tile_size = Window.width / 6
 
 
-#main game class
+# main game class
 class GameWidget(Widget):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -50,7 +50,8 @@ class GameWidget(Widget):
             Rectangle(source="resources/bg.png", pos=(0, 0), size=(Window.width, Window.height / 2))
             for i in range(8):
                 Rectangle(source="resources/grass1.png", pos=(0 + i * tile_size, 0), size=(tile_size, tile_size))
-            Rectangle(source=self.laser.texture, pos=(tile_size/4, Window.height - tile_size* 1.5), size=(0.75 * tile_size, 0.75 * tile_size))
+            Rectangle(source=self.laser.texture, pos=(tile_size / 4, Window.height - tile_size * 1.5),
+                      size=(0.75 * tile_size, 0.75 * tile_size))
 
         self.add_clouds()
         self.start_text = self.add_text("Click to play", tile_size / 2, Window.width / 2 - tile_size * 1.5,
@@ -76,7 +77,7 @@ class GameWidget(Widget):
         if self.pause and self.time_since_dead >= 5:
             self.pause = False
             self.game_reset()
-        if tile_size/4 < touch.x < tile_size and Window.height - tile_size * 1.5 < touch.y < Window.height - tile_size * 0.75 and self.lasers_left > 0:
+        if tile_size / 4 < touch.x < tile_size and Window.height - tile_size * 1.5 < touch.y < Window.height - tile_size * 0.75 and self.lasers_left > 0:
             self.laser.spawn(self.tank.draw.pos)
             self.lasers_left -= 1
             self.canvas.remove(self.laser_text)
@@ -118,8 +119,9 @@ class GameWidget(Widget):
             self.time_since_dead += dt
             self.tank.explosion(self.tank.exp_rec[1], self.tank.draw.pos)
         if self.time_since_dead > 5 and self.pause == True:
-            self.start_again_text = self.add_text("Click to play again", tile_size / 3, Window.width / 2 - tile_size*1.5,
-                                            Window.height / 2, (tile_size * 2, tile_size))
+            self.start_again_text = self.add_text("Click to play again", tile_size / 3,
+                                                  Window.width / 2 - tile_size * 1.5,
+                                                  Window.height / 2, (tile_size * 2, tile_size))
             self.canvas.add(self.start_again_text)
 
     def collision(self, e1, e2, reduction=0.0):
@@ -143,9 +145,9 @@ class GameWidget(Widget):
 
         size = tile_size * 6 * dt
 
-        if self.firing == True and self.touch_x > x + tile_size / 2 and x < Window.width - tile_size and self.touch_y < Window.height - 2*tile_size:
+        if self.firing == True and self.touch_x > x + tile_size / 2 and x < Window.width - tile_size and self.touch_y < Window.height - 2 * tile_size:
             x += size
-        if self.firing == True and self.touch_x < x + tile_size / 2 and x > 0 and self.touch_y < Window.height - 2*tile_size:
+        if self.firing == True and self.touch_x < x + tile_size / 2 and x > 0 and self.touch_y < Window.height - 2 * tile_size:
             x -= size
 
         self.tank.draw.pos = (x, self.tank.draw.pos[1])
@@ -212,7 +214,8 @@ class GameWidget(Widget):
         self.canvas.add(self.laser_text)
         self.add_clouds()
 
-#tank class declaration - the player controled object
+
+# tank class declaration - the player controled object
 class Tank:
     def __init__(self):
         self.pos = [Window.width / 2 - tile_size / 2, tile_size]
@@ -274,12 +277,14 @@ class Tank:
 
     def explosion(self, i, pos):
         self.exp_rec[0].pos = (pos[0] - tile_size, pos[1])
-        self.exp_rec[0].tex_coords = [0, i/15 + 1/15 + 1/3000, 1, i/15 + 1/15 + 1/3000, 1, i/15 + 1/3000, 0, i/15 + 1/3000]
+        self.exp_rec[0].tex_coords = [0, i / 15 + 1 / 15 + 1 / 3000, 1, i / 15 + 1 / 15 + 1 / 3000, 1,
+                                      i / 15 + 1 / 3000, 0, i / 15 + 1 / 3000]
         self.exp_rec[1] += 1
         if self.exp_rec[1] == 15:
             self.exp_rec[1] = 14
 
-#bullets shot by the player
+
+# bullets shot by the player
 class Bullets:
     def __init__(self):
         self.pos = [100, 100]
@@ -303,6 +308,7 @@ class Bullets:
         self.container.pop(i)
 
 
+# class that generates balls
 class Balls:
     def __init__(self):
         self.pos = [100, 100]
@@ -310,11 +316,13 @@ class Balls:
 
     def spawn(self):
         l_r = random.choice([-1, 1])
+        pos = ()
         if l_r == 1:
-            ran = random.randint(round(tile_size/2), round(tile_size))
-            pos = (ran*-1, Window.height/2)
+            ran = random.randint(round(tile_size / 2), round(tile_size))
+            pos = (ran * -1, Window.height / 2)
         if l_r == -1:
-            pos = (random.randint(round(Window.width + tile_size/2), round(Window.width + tile_size)), Window.height / 2)
+            pos = (
+            random.randint(round(Window.width + tile_size / 2), round(Window.width + tile_size)), Window.height / 2)
         self.container.append(
             [Ellipse(source="resources/ball.png", pos=pos, size=(tile_size / 2, tile_size / 2)), 0,
              tile_size * 0.02 * l_r, tile_size * 0.01 * -random.randint(8, 10),
@@ -322,7 +330,7 @@ class Balls:
 
     def movement(self, dt):
         for i in range(len(self.container)):
-            if tile_size/4 < self.container[i][0].pos[0] < Window.width - 1.25*tile_size:
+            if tile_size / 4 < self.container[i][0].pos[0] < Window.width - 1.25 * tile_size:
                 self.container[i][5] = 0
             if self.container[i][5] == 0:
                 if self.container[i][0].pos[0] > Window.width - tile_size / 2:
@@ -393,6 +401,7 @@ class Balls:
         game.canvas.add(game.score_text)
 
 
+# class that adds animations whenever the ball is destroyed
 class Explosion:
     def __init__(self):
         self.container = []
@@ -417,6 +426,7 @@ class Explosion:
             i += 1
 
 
+# class that generates bonuses
 class Bonus:
     def __init__(self):
         self.container = []
@@ -463,6 +473,7 @@ class Bonus:
             i += 1
 
 
+# class that animates Laser bonus
 class Laser:
     def __init__(self):
         self.container = []
@@ -493,7 +504,7 @@ class Laser:
             self.time = 0
 
     def add_animation(self, pos, frame):
-        for i in range(round((Window.height-tile_size)/(tile_size*0.75))):
+        for i in range(round((Window.height - tile_size) / (tile_size * 0.75))):
             self.container.append([Rectangle(source=self.texture_l, tex_coords=[0, 1 / 15, 1, 1 / 15, 1, 0, 0, 0],
                                              pos=(pos[0], pos[1] + tile_size * 0.75 * i),
                                              size=(tile_size * 0.75, tile_size * 0.75)), frame])
@@ -514,6 +525,7 @@ class Laser:
             if self.container[i][1] == 14:
                 self.container[i][1] = 0
             i += 1
+
 
 game = GameWidget()
 
