@@ -428,7 +428,7 @@ class Bonus:
         self.collection()
 
     def spawn(self, pos):
-        if random.randint(0, 15) == 1:
+        if random.randint(0, 5) == 1:
             if random.randint(0, 2) == 1:
                 self.container.append([Rectangle(source=self.texture, pos=pos, size=(tile_size / 2, tile_size / 2)), 0])
                 game.canvas.add(self.container[-1][0])
@@ -493,7 +493,7 @@ class Laser:
             self.time = 0
 
     def add_animation(self, pos, frame):
-        for i in range(13):
+        for i in range(round((Window.height-tile_size)/(tile_size*0.75))):
             self.container.append([Rectangle(source=self.texture_l, tex_coords=[0, 1 / 15, 1, 1 / 15, 1, 0, 0, 0],
                                              pos=(pos[0], pos[1] + tile_size * 0.75 * i),
                                              size=(tile_size * 0.75, tile_size * 0.75)), frame])
