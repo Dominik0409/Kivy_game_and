@@ -11,8 +11,14 @@ from kivy.core.audio import SoundLoader
 
 Config.set('kivy', 'window_icon', "resources/tank.png")
 
+#window size declaration
+Window.size = (540,960)
+
+#declaration of tile size which is later used in order to properly place objects on screen
 tile_size = Window.width / 6
 
+
+#main game class
 class GameWidget(Widget):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -206,7 +212,7 @@ class GameWidget(Widget):
         self.canvas.add(self.laser_text)
         self.add_clouds()
 
-
+#tank class declaration - the player controled object
 class Tank:
     def __init__(self):
         self.pos = [Window.width / 2 - tile_size / 2, tile_size]
@@ -273,7 +279,7 @@ class Tank:
         if self.exp_rec[1] == 15:
             self.exp_rec[1] = 14
 
-
+#bullets shot by the player
 class Bullets:
     def __init__(self):
         self.pos = [100, 100]
@@ -508,7 +514,6 @@ class Laser:
             if self.container[i][1] == 14:
                 self.container[i][1] = 0
             i += 1
-
 
 game = GameWidget()
 
